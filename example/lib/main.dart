@@ -144,8 +144,7 @@ class _CallPageState extends State<CallPage> {
                 child: SizedBox(
                   width: 114,
                   height: 170,
-                  child: ZegoCallKit().component1v1Call
-                      .localView, // Get from ZegoCallKit
+                  child: ZegoCallKit().component1v1Call.localView, // Get from ZegoCallKit
                 )),
             Positioned(
                 bottom: 100,

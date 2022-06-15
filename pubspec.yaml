@@ -1,7 +1,8 @@
 name: o_zz_rtc_call
 description: A new Flutter package project.
 version: 0.0.1
-homepage:
+homepage: "https://www.zegocloud.com"
+repository: "https://github.com/Match-Yang/o_zz_rtc_call"
 
 environment:
   sdk: ">=2.13.0 <2.17.0"
