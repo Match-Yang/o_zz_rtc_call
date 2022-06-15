@@ -160,6 +160,33 @@ class _ZegoCallSwitchButtonState extends State<ZegoCallSwitchButton> {
   }
 }
 
+enum MirrorMode {
+  zegoVideoMirrorModeOnlyPreviewMirror,
+  zegoVideoMirrorModeBothMirror,
+  zegoVideoMirrorModeNoMirror,
+  zegoVideoMirrorModeOnlyPublishMirror
+}
+enum ParticipantViewDisplayOption {
+  displayVoiceVolume,
+  displayMicState,
+  displayCameraState
+}
+
+typedef ParticipantViewDisplayOptions = List<ParticipantViewDisplayOption>;
+
+class ZegoCallLocalVideoConfig {
+  ZegoCallLocalVideoConfig(
+      {this.mirrorMode = MirrorMode.zegoVideoMirrorModeOnlyPreviewMirror,
+      this.viewDisplayOptions = const <ParticipantViewDisplayOption>[],
+      this.fps = 15});
+
+  MirrorMode mirrorMode;
+  ParticipantViewDisplayOptions viewDisplayOptions;
+  int fps;
+}
+
+class ZegoCallRemoteVideoConfig {}
+
 class ZegoCallComponent1v1Call extends ZegoCallComponentBase {
   static final ZegoCallComponent1v1Call _component1v1call =
       ZegoCallComponent1v1Call._internal();
@@ -179,27 +206,56 @@ class ZegoCallComponent1v1Call extends ZegoCallComponentBase {
   final ZegoCallSwitchButton _handUpSwitchButton =
       ZegoCallSwitchButton(iconOn: Icons.call_end, iconOff: Icons.call_end);
 
+  /// The [callback] when MicSwitchButton was clicked.
   set onMicSwitchClicked(Function(bool) callback) {
     _micSwitchButton.setOnButtonClicked((bool stateOn) {
-      ZegoExpressManager.shared.enableMic(stateOn);
+      clickMicSwitchButton(stateOn);
       callback(stateOn);
     });
   }
 
+  /// The [callback] when CameraSwitchButton was clicked.
   set onCameraSwitchClicked(Function(bool) callback) {
     _cameraSwitchButton.setOnButtonClicked((bool stateOn) {
-      ZegoExpressManager.shared.enableCamera(stateOn);
+      clickCameraSwitchButton(stateOn);
       callback(stateOn);
     });
   }
 
-  set onHandUpSwitchButtonClicked(Function(bool) callback) {
+  /// The [callback] when HandUpButton was clicked.
+  set onHandUpButtonClicked(Function(bool) callback) {
     _handUpSwitchButton.setOnButtonClicked((bool stateOn) {
-      ZegoExpressManager.shared.leaveRoom();
+      clickHandUpButton();
       callback(stateOn);
     });
   }
 
+  /// Call this function on your own button and set microphone state to [stateOn].
+  void clickMicSwitchButton(bool stateOn) {
+    ZegoExpressManager.shared.enableMic(stateOn);
+  }
+
+  /// Call this function on your own button and set camera state to [stateOn].
+  void clickCameraSwitchButton(bool stateOn) {
+    ZegoExpressManager.shared.enableCamera(stateOn);
+  }
+
+  /// Call this function on your own button and hand up the call.
+  void clickHandUpButton() {
+    ZegoExpressManager.shared.leaveRoom();
+  }
+
+  /// Set [config] to control how to display the local participant's view.
+  void setLocalVideoConfig(ZegoCallLocalVideoConfig config) {
+    // TODO
+  }
+
+  /// Set [config] to control how to display the remote participant's view.
+  void setRemoteVideoConfig(ZegoCallRemoteVideoConfig config) {
+    // TODO
+  }
+
+  /// Start an audio call with your [userID] and [userName] and the [callID] should be same as participant in the call.
   Future<void> startAudioCall(
       String callID, String userID, String userName) async {
     await _requestPermission();
@@ -226,6 +282,7 @@ class ZegoCallComponent1v1Call extends ZegoCallComponentBase {
     };
   }
 
+  /// Start a video call with your [userID] and [userName] and the [callID] should be same as participant in the call.
   Future<void> startVideoCall(
       String callID, String userID, String userName) async {
     await _requestPermission();
@@ -259,14 +316,17 @@ class ZegoCallComponent1v1Call extends ZegoCallComponentBase {
     };
   }
 
+  /// Get your local participant view and put it on your UI page.
   Widget get localView {
     return _localParticipantView;
   }
 
+  /// Get the other participant view and put it on your UI page.
   Widget get remoteView {
     return _remoteParticipantView;
   }
 
+  /// Return microphone button to control .
   Widget get micSwitchButton {
     return _micSwitchButton;
   }

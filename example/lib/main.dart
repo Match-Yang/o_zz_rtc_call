@@ -108,10 +108,16 @@ class _CallPageState extends State<CallPage> {
       var appSign = obj['appSign'] ?? "";
 
 
+
+
+
       // Using ZegoCallKit
       ZegoCallKit().enableComponent([Component.k1v1Call]);
       ZegoCallKit().init(appID, appSign);
-      ZegoCallComponent1v1Call().onHandUpSwitchButtonClicked = (bool stateOn) {
+      // You can decide how to display the participant's view by setting some options
+      // ZegoCallComponent1v1Call().setLocalVideoConfig(config);
+      // ZegoCallComponent1v1Call().setRemoteVideoConfig(config);
+      ZegoCallComponent1v1Call().onHandUpButtonClicked = (bool stateOn) {
         // Back to home page
         Navigator.pushReplacementNamed(context, '/home_page');
       };
@@ -149,6 +155,12 @@ class _CallPageState extends State<CallPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Microphone control button
+                    // ElevatedButton(onPressed: () {
+                    //   ZegoCallComponent1v1Call().clickMicSwitchButton(true);
+                    //   ZegoCallComponent1v1Call().micSwitchButton.click(true);
+                    //
+                    // }, child: Text('Click')),
+                    // You can call clickMicSwitchButton() in your own style button instead using the prebuilt button provided by the ZegoCallComponent.
                     ZegoCallComponent1v1Call().micSwitchButton,
                     // End call button
                     ZegoCallComponent1v1Call().handUpButton,

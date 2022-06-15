@@ -19,6 +19,9 @@ class ZegoCallKit {
 
   Components _components = [];
 
+  /// Enable the [components] you want to use in your app.
+  ///
+  /// You must enable the component before using it because the enable function will do some necessary resource initialization.
   void enableComponent(Components components) {
     assert(
         !(components.contains(Component.k1v1Call) &&
@@ -32,6 +35,9 @@ class ZegoCallKit {
     _components = components;
   }
 
+  // ZegoCallComponent1v1Call get
+
+  /// Init the call kit after you enable the components you need with [appID] and [appSign] which you can get from ZEGOCLOUD's console.
   void init(int appID, String appSign) {
     // 在这里初始化SDK，RTC、IM、Effect（根据实际注册插件判断哪些SDK要初始化）
     // 各插件自行监听SDK回调
@@ -43,12 +49,15 @@ class ZegoCallKit {
     }
   }
 
+  /// Disable all components and release all resources.
   void unInit() {
     // 在这里反初始化SDK，RTC、IM、Effect（根据实际注册插件判断哪些SDK要反初始化）
     // 在这里对插件的初始化顺序进行管理
     if (_components.contains(Component.k1v1Call)) {
       ZegoCallComponent1v1Call().internalUnInitByCallKit();
     }
+
+    _components = [];
   }
 
   /// Create SDK instance and setup some callbacks
