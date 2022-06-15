@@ -3,23 +3,8 @@
 ## Add ZegoCallKit into your project
 
 ### Add ZegoCallKit dependencies
-- Add by pub
 ```bash
 $ flutter pub add o_zz_rtc_call
-```
-- Using git repository
-```xml
-dependencies:
-  flutter:
-    sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  o_zz_rtc_call:
-    git:
-      url: https://github.com/Match-Yang/o_zz_rtc_call.git
 ```
 
 ### Import the library
@@ -30,7 +15,8 @@ import 'package:o_zz_rtc_call/o_zz_rtc_call.dart';
 ### Setup permission configuration
 
 1. Android
-   Add the lines to [project/android/app/src/main/AndroidManifest.xml]
+   
+Add the lines to [project/android/app/src/main/AndroidManifest.xml]
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.zego_call_kit_example">
@@ -44,7 +30,8 @@ import 'package:o_zz_rtc_call/o_zz_rtc_call.dart';
 ```
 
 2. iOS
-   Add the lines to [your_project/ios/Runner/Info.plist]
+   
+Add the lines to [your_project/ios/Runner/Info.plist]
 ```xml
 <dict>
 	<key>NSCameraUsageDescription</key>
@@ -56,6 +43,9 @@ import 'package:o_zz_rtc_call/o_zz_rtc_call.dart';
 ## How to add 1v1 call functionality into my app?
 
 ### Using prebuilt UI widget
+
+Check completed example code: https://pub.dev/packages/o_zz_rtc_call/example
+
 1. Enable 1v1 call component on callkit
 ```dart
 ZegoCallKit().enableComponent([Component.k1v1Call]);
@@ -106,5 +96,5 @@ child: Row(
 ZegoCallKit().component1v1Call.startVideoCall(callID, userID, userName);
 ```
 
-Check completed example code: https://github.com/Match-Yang/o_zz_rtc_call/blob/master/example/lib/main.dart
+
 
