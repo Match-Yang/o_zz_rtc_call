@@ -42,32 +42,47 @@ Add the lines to [your_project/ios/Runner/Info.plist]
 
 ### Using prebuilt UI widget
 
-Check completed example code: https://pub.dev/packages/o_zz_rtc_call/example
+**Sample Code**
+```dart
+class CallPage extends StatefulWidget {
+  const CallPage({Key? key}) : super(key: key);
 
-1. Init ZegoCallKit on your application start up
+  @override
+  State<CallPage> createState() => _CallPageState();
+}
 
-You can get the AppID and AppSign from ZEGOCLOUD Console [My Projects] : https://console.zegocloud.com/project
-```dart
-ZegoCallKit().init(appID, appSign);
-```
-2. Enable 1v1 call component on callkit
-```dart
-ZegoCallKit().enableComponent([Component.k1v1Call]);
-```
-3. Listening button click callback if you want to handle some events of ZegoCallKit
-```dart
-ZegoCallKit().component1v1Call.handUpButton.onClicked = (bool stateOn) {
-  // For example, you want to back to home page after call ended
-  // Navigator.pushReplacementNamed(context, '/home_page');
-};
-```
-4. Add participant view to your UI
-```dart
-child: Stack(
+class _CallPageState extends State<CallPage> {
+
+  @override
+  void initState() {
+    // Using ZegoCallKit
+    // You can get the AppID and AppSign from ZEGOCLOUD Console [My Projects] : https://console.zegocloud.com/project
+    ZegoCallKit().init(0000000, "Your AppSign"); /// <--- 1.Init ZegoCallKit on your application start up, we put it on CallPage's initState() just for example.
+    ZegoCallKit().enableComponent([Component.k1v1Call]); /// <--- 2. Enable 1v1 call component on callkit
+    // You can decide how to display the participant's view by setting some options
+    // ZegoCallKit().component1v1Call.setLocalVideoConfig(config);
+    // ZegoCallKit().component1v1Call.setRemoteVideoConfig(config);
+    ZegoCallKit().component1v1Call.handUpButton.onClicked = (bool stateOn) { /// <--- 3. Listening button click callback if you want to handle some events of ZegoCallKit
+      // Back to home page
+      Navigator.pushReplacementNamed(context, '/home_page');
+    };
+    // You can start the call whenever you want
+    // The callID should be same as the other participant use to start the call. We recommend only contain letters, numbers, and '_'.
+    // The userID should be unique and we recommend only contain letters, numbers, and '_'.
+    ZegoCallKit().component1v1Call.startVideoCall('123321', 'user_id', 'user_name'); /// <--- 6. Start the call
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Stack(
           children: <Widget>[
             SizedBox.expand(
               child:
-              ZegoCallKit().component1v1Call.remoteView, // Get from ZegoCallKit
+              ZegoCallKit().component1v1Call.remoteView, /// <--- 4. Add participant view to your UI
             ),
             Positioned(
                 top: 100,
@@ -75,35 +90,43 @@ child: Stack(
                 child: SizedBox(
                   width: 114,
                   height: 170,
-                  child: ZegoCallKit().component1v1Call.localView, // Get from ZegoCallKit
+                  child: ZegoCallKit().component1v1Call.localView, /// <--- 4. Add participant view to your UI
                 )),
-...
+            Positioned(
+                bottom: 100,
+                left: 0,
+                right: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // You can call Button.click in your own style button instead using the prebuilt button provided by the ZegoCallComponent.
+                    ElevatedButton(onPressed: () {
+                      ZegoCallKit().component1v1Call.cameraSwitchButton.click(false);
+                    }, child: const Text('Camera Off')),
+                    // Microphone control button
+                    ZegoCallKit().component1v1Call.micSwitchButton, /// <--- 5. Add call control buttons to your UI
+                    // End call button
+                    ZegoCallKit().component1v1Call.handUpButton, /// <--- 5. Add call control buttons to your UI
+                    // Camera control button
+                    ZegoCallKit().component1v1Call.cameraSwitchButton, /// <--- 5. Add call control buttons to your UI
+                  ],
+                )),
+          ],
+        ),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
 ```
+
+**Working Flow**
+
+1. Init ZegoCallKit on your application start up
+2. Enable 1v1 call component on callkit
+3. Listening button click callback if you want to handle some events of ZegoCallKit(Optional)
+4. Add participant view to your UI
 5. Add call control buttons to your UI
-```dart
-child: Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    // You can call also Button.click in your own style button instead using the prebuilt button provided by the ZegoCallKit.
-    ElevatedButton(onPressed: () {
-      ZegoCallKit().component1v1Call.cameraSwitchButton.click(false);
-    }, child: const Text('Camera Off')),
-    // Microphone control button
-    ZegoCallKit().component1v1Call.micSwitchButton,
-    // End call button
-    ZegoCallKit().component1v1Call.handUpButton,
-    // Camera control button
-    ZegoCallKit().component1v1Call.cameraSwitchButton,
-  ],
-```
 6. Start the call
-
-The `callID` should be same as the other participant use to start the call. We recommend only contain letters, numbers, and '\_\'.
-
-The `userID` should be unique and we recommend only contain letters, numbers, and '\_\'.
-```dart
-ZegoCallKit().component1v1Call.startVideoCall(callID, userID, userName);
-```
 
 
 
