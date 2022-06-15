@@ -40,7 +40,14 @@ Add the lines to [your_project/ios/Runner/Info.plist]
 
 ## How to add 1v1 call functionality into my app?
 
-### Using prebuilt UI widget
+**Working Flow**
+
+1. Init ZegoCallKit on your application start up
+2. Enable 1v1 call component on callkit
+3. Listening button click callback if you want to handle some events of ZegoCallKit(Optional)
+4. Add participant view to your UI
+5. Add call control buttons to your UI
+6. Start the call
 
 **Sample Code**
 ```dart
@@ -118,15 +125,6 @@ class _CallPageState extends State<CallPage> {
   }
 }
 ```
-
-**Working Flow**
-
-1. Init ZegoCallKit on your application start up
-2. Enable 1v1 call component on callkit
-3. Listening button click callback if you want to handle some events of ZegoCallKit(Optional)
-4. Add participant view to your UI
-5. Add call control buttons to your UI
-6. Start the call
 
 
 
