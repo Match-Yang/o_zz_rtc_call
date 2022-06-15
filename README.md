@@ -46,18 +46,22 @@ Add the lines to [your_project/ios/Runner/Info.plist]
 
 Check completed example code: https://pub.dev/packages/o_zz_rtc_call/example
 
-1. Enable 1v1 call component on callkit
+1. Init ZegoCallKit on your application start up
+```dart
+ZegoCallKit().init(appID, appSign);
+```
+2. Enable 1v1 call component on callkit
 ```dart
 ZegoCallKit().enableComponent([Component.k1v1Call]);
 ```
-2. Listening button click callback
+3. Listening button click callback
 ```dart
 ZegoCallKit().component1v1Call.handUpButton.onClicked = (bool stateOn) {
   // Back to home page
   Navigator.pushReplacementNamed(context, '/home_page');
 };
 ```
-3. Add participant view to your UI
+4. Add participant view to your UI
 ```dart
 child: Stack(
           children: <Widget>[
@@ -74,7 +78,7 @@ child: Stack(
                   child: ZegoCallKit().component1v1Call.localView, // Get from ZegoCallKit
                 )),
 ```
-4. Add call control buttons to your UI
+5. Add call control buttons to your UI
 ```dart
 child: Row(
   mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +95,7 @@ child: Row(
     ZegoCallKit().component1v1Call.cameraSwitchButton,
   ],
 ```
-5. Start the call
+6. Start the call
 ```dart
 ZegoCallKit().component1v1Call.startVideoCall(callID, userID, userName);
 ```
