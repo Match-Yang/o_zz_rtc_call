@@ -98,8 +98,8 @@ child: Row(
 ```
 6. Start the call
 
-The `callID` should be same as the other participant use to start the call. We recommend only contain letters, numbers, and '_'.
-The `userID` should be unique and we recommend only contain letters, numbers, and '_'.
+The `callID` should be same as the other participant use to start the call. We recommend only contain letters, numbers, and '&#95'.
+The `userID` should be unique and we recommend only contain letters, numbers, and '&#95'.
 ```dart
 ZegoCallKit().component1v1Call.startVideoCall(callID, userID, userName);
 ```
