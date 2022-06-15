@@ -33,9 +33,18 @@ class ZegoCallKit {
       return;
     }
     _components = components;
+
+    if (_components.contains(Component.k1v1Call)) {
+      // 在这里对插件的初始化顺序进行管理
+      if (_components.contains(Component.k1v1Call)) {
+        ZegoCallComponent1v1Call().internalInitByCallKit();
+      }
+    }
   }
 
-  // ZegoCallComponent1v1Call get
+  ZegoCallComponent1v1Call get component1v1Call {
+    return ZegoCallComponent1v1Call();
+  }
 
   /// Init the call kit after you enable the components you need with [appID] and [appSign] which you can get from ZEGOCLOUD's console.
   void init(int appID, String appSign) {
@@ -43,10 +52,7 @@ class ZegoCallKit {
     // 各插件自行监听SDK回调
     _createEngine(appID, appSign);
 
-    // 在这里对插件的初始化顺序进行管理
-    if (_components.contains(Component.k1v1Call)) {
-      ZegoCallComponent1v1Call().internalInitByCallKit();
-    }
+    // TODO 设置所有回调转发
   }
 
   /// Disable all components and release all resources.

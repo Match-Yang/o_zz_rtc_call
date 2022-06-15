@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
   final int appID = ;
   final String appSign = '';
 
-  final String callID = '222';
+  final String callID = '111';
 
   /// Get the necessary arguments to join the room for start the talk or live streaming
   ///
@@ -112,17 +112,17 @@ class _CallPageState extends State<CallPage> {
 
 
       // Using ZegoCallKit
-      ZegoCallKit().enableComponent([Component.k1v1Call]);
       ZegoCallKit().init(appID, appSign);
+      ZegoCallKit().enableComponent([Component.k1v1Call]);
       // You can decide how to display the participant's view by setting some options
-      // ZegoCallComponent1v1Call().setLocalVideoConfig(config);
-      // ZegoCallComponent1v1Call().setRemoteVideoConfig(config);
-      ZegoCallComponent1v1Call().onHandUpButtonClicked = (bool stateOn) {
+      // ZegoCallKit().component1v1Call.setLocalVideoConfig(config);
+      // ZegoCallKit().component1v1Call.setRemoteVideoConfig(config);
+      ZegoCallKit().component1v1Call.handUpButton.onClicked = (bool stateOn) {
         // Back to home page
         Navigator.pushReplacementNamed(context, '/home_page');
       };
       // You can start the call whenever you want
-      ZegoCallComponent1v1Call().startVideoCall(callID, userID, userName);
+      ZegoCallKit().component1v1Call.startVideoCall(callID, userID, userName);
     }
 
     super.didChangeDependencies();
@@ -136,7 +136,7 @@ class _CallPageState extends State<CallPage> {
           children: <Widget>[
             SizedBox.expand(
               child:
-                  ZegoCallComponent1v1Call().remoteView, // Get from ZegoCallKit
+              ZegoCallKit().component1v1Call.remoteView, // Get from ZegoCallKit
             ),
             Positioned(
                 top: 100,
@@ -144,7 +144,7 @@ class _CallPageState extends State<CallPage> {
                 child: SizedBox(
                   width: 114,
                   height: 170,
-                  child: ZegoCallComponent1v1Call()
+                  child: ZegoCallKit().component1v1Call
                       .localView, // Get from ZegoCallKit
                 )),
             Positioned(
@@ -154,18 +154,16 @@ class _CallPageState extends State<CallPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // You can call Button.click in your own style button instead using the prebuilt button provided by the ZegoCallComponent.
+                    ElevatedButton(onPressed: () {
+                      ZegoCallKit().component1v1Call.cameraSwitchButton.click(false);
+                    }, child: const Text('Camera Off')),
                     // Microphone control button
-                    // ElevatedButton(onPressed: () {
-                    //   ZegoCallComponent1v1Call().clickMicSwitchButton(true);
-                    //   ZegoCallComponent1v1Call().micSwitchButton.click(true);
-                    //
-                    // }, child: Text('Click')),
-                    // You can call clickMicSwitchButton() in your own style button instead using the prebuilt button provided by the ZegoCallComponent.
-                    ZegoCallComponent1v1Call().micSwitchButton,
+                    ZegoCallKit().component1v1Call.micSwitchButton,
                     // End call button
-                    ZegoCallComponent1v1Call().handUpButton,
+                    ZegoCallKit().component1v1Call.handUpButton,
                     // Camera control button
-                    ZegoCallComponent1v1Call().cameraSwitchButton,
+                    ZegoCallKit().component1v1Call.cameraSwitchButton,
                   ],
                 )),
           ],

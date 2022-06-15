@@ -117,10 +117,25 @@ class ZegoCallSwitchButton extends StatefulWidget {
   IconData iconOn;
   IconData iconOff;
   bool defaultStateOn;
-  Function(bool)? onButtonClicked;
 
-  void setOnButtonClicked(Function(bool) callback) {
-    onButtonClicked = callback;
+  List<Function(bool)> _onClickedList = [];
+
+  void click(bool stateOn) {
+    for (var callback in _onClickedList) {
+      callback(stateOn);
+    }
+  }
+
+  set onClicked(Function(bool) callback) {
+    _onClickedList.add(callback);
+  }
+
+  List<Function(bool)> get onClickedList {
+    return _onClickedList;
+  }
+
+  void clearOnClickedCallback() {
+    _onClickedList = [];
   }
 
   @override
@@ -149,12 +164,12 @@ class _ZegoCallSwitchButtonState extends State<ZegoCallSwitchButton> {
         size: 28,
       ),
       onPressed: () {
-        if (widget.onButtonClicked != null) {
-          widget.onButtonClicked!(_stateOn);
-        }
         setState(() {
           _stateOn = !_stateOn;
         });
+        for (var callback in widget.onClickedList) {
+          callback(_stateOn);
+        }
       },
     );
   }
@@ -205,45 +220,6 @@ class ZegoCallComponent1v1Call extends ZegoCallComponentBase {
       iconOn: Icons.camera_alt, iconOff: Icons.camera_alt_outlined);
   final ZegoCallSwitchButton _handUpSwitchButton =
       ZegoCallSwitchButton(iconOn: Icons.call_end, iconOff: Icons.call_end);
-
-  /// The [callback] when MicSwitchButton was clicked.
-  set onMicSwitchClicked(Function(bool) callback) {
-    _micSwitchButton.setOnButtonClicked((bool stateOn) {
-      clickMicSwitchButton(stateOn);
-      callback(stateOn);
-    });
-  }
-
-  /// The [callback] when CameraSwitchButton was clicked.
-  set onCameraSwitchClicked(Function(bool) callback) {
-    _cameraSwitchButton.setOnButtonClicked((bool stateOn) {
-      clickCameraSwitchButton(stateOn);
-      callback(stateOn);
-    });
-  }
-
-  /// The [callback] when HandUpButton was clicked.
-  set onHandUpButtonClicked(Function(bool) callback) {
-    _handUpSwitchButton.setOnButtonClicked((bool stateOn) {
-      clickHandUpButton();
-      callback(stateOn);
-    });
-  }
-
-  /// Call this function on your own button and set microphone state to [stateOn].
-  void clickMicSwitchButton(bool stateOn) {
-    ZegoExpressManager.shared.enableMic(stateOn);
-  }
-
-  /// Call this function on your own button and set camera state to [stateOn].
-  void clickCameraSwitchButton(bool stateOn) {
-    ZegoExpressManager.shared.enableCamera(stateOn);
-  }
-
-  /// Call this function on your own button and hand up the call.
-  void clickHandUpButton() {
-    ZegoExpressManager.shared.leaveRoom();
-  }
 
   /// Set [config] to control how to display the local participant's view.
   void setLocalVideoConfig(ZegoCallLocalVideoConfig config) {
@@ -327,20 +303,33 @@ class ZegoCallComponent1v1Call extends ZegoCallComponentBase {
   }
 
   /// Return microphone button to control .
-  Widget get micSwitchButton {
+  ZegoCallSwitchButton get micSwitchButton {
     return _micSwitchButton;
   }
 
-  Widget get cameraSwitchButton {
+  ZegoCallSwitchButton get cameraSwitchButton {
     return _cameraSwitchButton;
   }
 
-  Widget get handUpButton {
+  ZegoCallSwitchButton get handUpButton {
     return _handUpSwitchButton;
   }
 
   @override
-  void internalInitByCallKit() {}
+  void internalInitByCallKit() {
+    _micSwitchButton.clearOnClickedCallback();
+    _micSwitchButton.onClicked = (bool stateOn) {
+      ZegoExpressManager.shared.enableMic(stateOn);
+    };
+    _cameraSwitchButton.clearOnClickedCallback();
+    _cameraSwitchButton.onClicked = (bool stateOn) {
+      ZegoExpressManager.shared.enableCamera(stateOn);
+    };
+    _handUpSwitchButton.clearOnClickedCallback();
+    _handUpSwitchButton.onClicked = (bool stateOn) {
+      ZegoExpressManager.shared.leaveRoom();
+    };
+  }
 
   @override
   void internalUnInitByCallKit() {
